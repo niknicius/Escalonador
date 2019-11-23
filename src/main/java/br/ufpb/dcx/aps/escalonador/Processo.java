@@ -1,7 +1,7 @@
 package br.ufpb.dcx.aps.escalonador;
 
-import java.util.ArrayList;
-import java.util.List;
+//import java.util.ArrayList;
+//import java.util.List;
 
 public class Processo {
 
