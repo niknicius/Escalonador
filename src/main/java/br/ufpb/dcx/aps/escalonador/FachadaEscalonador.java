@@ -187,7 +187,13 @@ public class FachadaEscalonador {
 				}
 			}
 		}
-		
+
+		if(existe){
+			throw new EscalonadorException();
+		}else {
+			Processo p = new Processo(nomeProcesso, this.tick, prioridade);
+			this.fila.add(p);
+		}
 	}
 
 	public void finalizarProcesso(String nomeProcesso) {

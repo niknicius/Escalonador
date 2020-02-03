@@ -9,11 +9,18 @@ public class Processo {
     private int tickInicial;
     private int tickFinal;
     private int ticks;
+    private int prioridade;
     private boolean bloqueado;
+
    
     public Processo(String name, int tickInicial) {
         this.name = name;
         this.tickInicial = tickInicial;
+    }
+    public Processo(String name, int tickInicial, int prioridade) {
+        this.name = name;
+        this.tickInicial = tickInicial;
+        this.prioridade = prioridade;
     }
 
     public String getName() {
