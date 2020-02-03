@@ -7,6 +7,7 @@ public class FachadaEscalonador {
     private TipoEscalonador tipoEscalonador;
     private int quantum;
 	private int tick;
+	private int prioridade;
 	private Processo rodando;
 	private ArrayList<Processo> fila = new ArrayList<>();
 	private ArrayList<Processo> bloqueados = new ArrayList<>();
@@ -31,7 +32,7 @@ public class FachadaEscalonador {
 			this.quantum = quantum;
 		}
 	}
-
+	
 	public String getStatus() {
 		String result = "Escalonador " + this.tipoEscalonador + ";Processos: {";
 		if(this.rodando != null){
@@ -165,7 +166,28 @@ public class FachadaEscalonador {
 	}
 
 	public void adicionarProcesso(String nomeProcesso, int prioridade) {
-		throw new EscalonadorException();
+		if(nomeProcesso == null){
+			throw new EscalonadorException();
+		}
+		boolean existe = false;
+		if(this.rodando != null && this.rodando.getName().equalsIgnoreCase(nomeProcesso)){
+			existe = false;
+		}else {
+			for (Processo p : this.fila) {
+				if (p.getName().equalsIgnoreCase(nomeProcesso)) {
+					existe = true;
+					break;
+				}
+			}
+
+			for (Processo p : this.bloqueados) {
+				if (p.getName().equalsIgnoreCase(nomeProcesso)) {
+					existe = true;
+					break;
+				}
+			}
+		}
+		
 	}
 
 	public void finalizarProcesso(String nomeProcesso) {
