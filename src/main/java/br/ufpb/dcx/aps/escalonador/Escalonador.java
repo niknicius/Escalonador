@@ -7,9 +7,8 @@ public interface Escalonador {
     void removeProcessosExpirados();
     void readicionaProcessoBloqueado();
     void removeProcessosBloqueados();
-    void adicionarProcesso();
-    void finalizarProcesso();
-    void bloquearProcesso();
-    void retomarProcesso();
-    void adicionarProcessoTempoFixo();
+    void adicionarProcesso(String nomeProcesso);
+    void finalizarProcesso(String nomeProcesso);
+    void bloquearProcesso(String nomeProcesso);
+    void retomarProcesso(String nomeProcesso);
 }
