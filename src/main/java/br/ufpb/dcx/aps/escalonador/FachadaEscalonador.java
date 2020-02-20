@@ -17,11 +17,15 @@ public class FachadaEscalonador {
 	public FachadaEscalonador(TipoEscalonador tipoEscalonador) {
 		if(tipoEscalonador == null){
 			throw new EscalonadorException();
-		}else{
+		}
+		else{
 			this.tipoEscalonador = tipoEscalonador;
 		}
         this.tick = 0;
         this.quantum = 3;
+        if(tipoEscalonador.equals(TipoEscalonador.MaisCurtoPrimeiro)) {
+			this.quantum = 0;
+		}
 	}
 
 	public FachadaEscalonador(TipoEscalonador roundrobin, int quantum) {
@@ -32,7 +36,7 @@ public class FachadaEscalonador {
 			this.quantum = quantum;
 		}
 	}
-
+	
 	public String getStatus() {
 		String result = "Escalonador " + this.tipoEscalonador + ";Processos: {";
 		if(this.rodando != null){
