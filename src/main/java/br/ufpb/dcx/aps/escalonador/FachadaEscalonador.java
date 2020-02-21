@@ -11,6 +11,8 @@ public class FachadaEscalonador {
 		}
 		else if(tipoEscalonador.equals(TipoEscalonador.RoundRobin)){
 			this.setTipoEscalonadorRoundRobin(3);
+		} else if(tipoEscalonador.equals(TipoEscalonador.Prioridade)){
+			this.setTipoEscalonadorPrioridade();
 		}
 
 	}
@@ -18,8 +20,10 @@ public class FachadaEscalonador {
 	public FachadaEscalonador(TipoEscalonador tipoEscalonador, int quantum) {
 		if(quantum <= 0){
 			throw  new EscalonadorException();
-		}else{
+		}else if(tipoEscalonador.equals(TipoEscalonador.RoundRobin)){
 			this.setTipoEscalonadorRoundRobin(quantum);
+		}else if(tipoEscalonador.equals(TipoEscalonador.Prioridade)){
+			this.setTipoEscalonadorPrioridade(quantum);
 		}
 	}
 
@@ -27,8 +31,17 @@ public class FachadaEscalonador {
 		this.escalonador = new RoundRobin();
 	}
 
+
 	void setTipoEscalonadorRoundRobin(int quantum){
 		this.escalonador = new RoundRobin(quantum);
+	}
+
+	void setTipoEscalonadorPrioridade(){
+		this.escalonador = new Prioridade();
+	}
+
+	void setTipoEscalonadorPrioridade(int quantum){
+		this.escalonador = new Prioridade(quantum);
 	}
 
 	void adicionarProcesso(String nomeProcesso){

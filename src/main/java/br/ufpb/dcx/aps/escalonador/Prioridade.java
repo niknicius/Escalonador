@@ -2,7 +2,7 @@ package br.ufpb.dcx.aps.escalonador;
 
 import java.util.ArrayList;
 
-public class RoundRobin implements Escalonador {
+public class Prioridade implements Escalonador {
 
     private int quantum;
     private int tick;
@@ -11,17 +11,17 @@ public class RoundRobin implements Escalonador {
     private ArrayList<Processo> bloqueados = new ArrayList<>();
     private ArrayList<Processo> aRetormar = new ArrayList<>();
 
-    public RoundRobin(){
+    public Prioridade(){
         this.quantum = 3;
     }
 
-    public RoundRobin(int quantum){
+    public Prioridade(int quantum){
         this.quantum = quantum;
     }
 
     @Override
     public String getStatus() {
-        String result = "Escalonador " + TipoEscalonador.RoundRobin + ";Processos: {";
+        String result = "Escalonador " + TipoEscalonador.Prioridade + ";Processos: {";
         if(this.rodando != null){
             result += "Rodando: " + this.rodando.toString();
         }
@@ -53,7 +53,12 @@ public class RoundRobin implements Escalonador {
             this.rodando = this.fila.remove(0);
         }else if(this.rodando != null && this.rodando.getTickFinal() != 0 && this.rodando.getTickFinal() < (this.tick)){
             this.rodando = null;
-        }else if(this.rodando != null && this.fila.size() > 0 && this.rodando.getTicks()== this.quantum){
+        }else if(this.rodando != null && this.fila.size() > 0 && this.rodando.getPrioridade() < this.fila.get(0).getPrioridade()){
+            this.fila.add(this.rodando);
+            this.rodando = this.fila.remove(0);
+            System.out.println("a");
+        }
+        else if(this.rodando != null && this.fila.size() > 0 && this.rodando.getTicks()== this.quantum){
             this.fila.add(this.rodando);
             this.rodando.setTicks(0);
             this.rodando = this.fila.remove(0);
@@ -160,8 +165,54 @@ public class RoundRobin implements Escalonador {
 
     @Override
     public void adicionarProcesso(String nomeProcesso, int quantum) {
-        throw new EscalonadorException();
+
+        if(nomeProcesso == null){
+            throw new EscalonadorException();
+        }
+        boolean existe = false;
+        if(this.rodando != null && this.rodando.getName().equalsIgnoreCase(nomeProcesso)){
+            existe = false;
+        }else {
+            for (Processo p : this.fila) {
+                if (p.getName().equalsIgnoreCase(nomeProcesso)) {
+                    existe = true;
+                    break;
+                }
+            }
+
+            for (Processo p : this.bloqueados) {
+                if (p.getName().equalsIgnoreCase(nomeProcesso)) {
+                    existe = true;
+                    break;
+                }
+            }
+        }
+
+        if(existe){
+            throw new EscalonadorException();
+        }else {
+            Processo p = new Processo(nomeProcesso, this.tick, quantum);
+            if(checarMaiorPriordadeFila(p.getPrioridade())){
+                this.fila.add(p);
+            }else{
+                this.fila.add(0, p);
+            }
+
+        }
     }
+
+    private boolean checarMaiorPriordadeFila(int prioridade){
+        boolean existe = false;
+
+        for(Processo p : this.fila){
+            if(p.getPrioridade() < prioridade){
+                existe = true;
+                break;
+            }
+        }
+        return existe;
+    }
+
 
     @Override
     public void finalizarProcesso(String nomeProcesso) {

@@ -1,8 +1,5 @@
 package br.ufpb.dcx.aps.escalonador;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Processo {
 
     private String name;
@@ -67,5 +64,13 @@ public class Processo {
 
     public void setBloqueado(boolean bloqueado) {
         this.bloqueado = bloqueado;
+    }
+
+    public int getPrioridade() {
+        return prioridade;
+    }
+
+    public void setPrioridade(int prioridade) {
+        this.prioridade = prioridade;
     }
 }
