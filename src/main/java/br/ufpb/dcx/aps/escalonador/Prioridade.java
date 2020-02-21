@@ -1,15 +1,17 @@
 package br.ufpb.dcx.aps.escalonador;
 
 import java.util.ArrayList;
+import java.util.Collections;
+
 
 public class Prioridade implements Escalonador {
 
     private int quantum;
     private int tick;
     private Processo rodando;
-    private ArrayList<Processo> fila = new ArrayList<>();
-    private ArrayList<Processo> bloqueados = new ArrayList<>();
-    private ArrayList<Processo> aRetormar = new ArrayList<>();
+    private ArrayList<Processo> fila = new ArrayList<Processo>();
+    private ArrayList<Processo> bloqueados = new ArrayList<Processo>();
+    private ArrayList<Processo> aRetormar = new ArrayList<Processo>();
 
     public Prioridade(){
         this.quantum = 3;
@@ -132,7 +134,6 @@ public class Prioridade implements Escalonador {
 
     @Override
     public void adicionarProcesso(String nomeProcesso) {
-
         if(nomeProcesso == null){
             throw new EscalonadorException();
         }
@@ -164,8 +165,7 @@ public class Prioridade implements Escalonador {
     }
 
     @Override
-    public void adicionarProcesso(String nomeProcesso, int quantum) {
-
+    public void adicionarProcesso(String nomeProcesso, int prioridad) {
         if(nomeProcesso == null){
             throw new EscalonadorException();
         }
@@ -188,10 +188,11 @@ public class Prioridade implements Escalonador {
             }
         }
 
+
         if(existe){
             throw new EscalonadorException();
         }else {
-            Processo p = new Processo(nomeProcesso, this.tick, quantum);
+            Processo p = new Processo(nomeProcesso, this.tick, prioridad);
             if(checarMaiorPriordadeFila(p.getPrioridade())){
                 this.fila.add(p);
             }else{
