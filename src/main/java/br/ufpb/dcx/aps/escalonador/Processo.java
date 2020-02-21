@@ -6,6 +6,7 @@ public class Processo {
     private int tickInicial;
     private int tickFinal;
     private int ticks;
+    private int duracao;
     private int prioridade;
     private boolean bloqueado;
 
@@ -14,11 +15,13 @@ public class Processo {
         this.name = name;
         this.tickInicial = tickInicial;
     }
+
     public Processo(String name, int tickInicial, int prioridade) {
         this.name = name;
         this.tickInicial = tickInicial;
         this.prioridade = prioridade;
     }
+
 
     public String getName() {
         return name;
@@ -72,5 +75,13 @@ public class Processo {
 
     public void setPrioridade(int prioridade) {
         this.prioridade = prioridade;
+    }
+
+    public int getDuracao() {
+        return duracao;
+    }
+
+    public void setDuracao(int duracao) {
+        this.duracao = duracao;
     }
 }

@@ -12,4 +12,5 @@ public interface Escalonador {
     void finalizarProcesso(String nomeProcesso);
     void bloquearProcesso(String nomeProcesso);
     void retomarProcesso(String nomeProcesso);
+    void adicionarProcessoTempoFixo(String nomeProcesso, int duracao);
 }
