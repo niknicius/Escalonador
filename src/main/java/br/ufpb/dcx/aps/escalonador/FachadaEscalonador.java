@@ -74,7 +74,7 @@ public class FachadaEscalonador {
 		    this.rodando.setTicks(0);
 		    this.rodando = this.fila.remove(0);
         }
-
+		
 		this.readicionaProcessoBloqueado();
 		this.incrementaTickProcessoAtual();
 
@@ -255,7 +255,7 @@ public class FachadaEscalonador {
 		}
 	}
 
-	public void adicionarProcessoTempoFixo(String string, int duracao) {
-
+	public void adicionarProcessoTempoFixo(String nomeProcesso, int duracao) {
+		
 	}
 }
