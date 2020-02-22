@@ -58,7 +58,7 @@ public class FachadaEscalonador {
 	}
 
 	void adicionarProcesso(String nomeProcesso, int prioridade){
-		this.escalonador.adicionarProcesso(nomeProcesso);
+		this.escalonador.adicionarProcesso(nomeProcesso, prioridade);
 	}
 
 	void finalizarProcesso(String nomeProcesso){

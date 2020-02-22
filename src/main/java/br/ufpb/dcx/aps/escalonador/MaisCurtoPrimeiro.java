@@ -1,6 +1,7 @@
 package br.ufpb.dcx.aps.escalonador;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MaisCurtoPrimeiro implements Escalonador {
 
@@ -45,14 +46,25 @@ public class MaisCurtoPrimeiro implements Escalonador {
         tick++;
 
         if(this.rodando == null && this.fila.size() > 0){
+            this.ordernaFila();
             this.rodando = this.fila.remove(0);
-        }else if(this.rodando != null && this.rodando.getDuracao() == this.rodando.getTicks()){
-            this.rodando = null;
         }
 
         if(this.rodando != null){
-            this.rodando.setTicks(this.rodando.getTicks() + 1);
+            if(this.rodando.getDuracao() == this.rodando.getTicks()){
+                if(this.fila.size() > 0){
+                    this.rodando = this.fila.remove(0);
+                }else {
+                    this.rodando = null;
+                }
+            }
         }
+
+        if(this.rodando != null){
+            this.rodando.setTicks(this.rodando .getTicks() + 1);
+        }
+
+        this.ordernaFila();
     }
 
     @Override
@@ -109,7 +121,7 @@ public class MaisCurtoPrimeiro implements Escalonador {
 
     @Override
     public void adicionarProcessoTempoFixo(String nomeProcesso, int duracao){
-        if(nomeProcesso == null){
+        if(nomeProcesso == null || duracao <= 0){
             throw new EscalonadorException();
         }
         boolean existe = false;
@@ -138,6 +150,8 @@ public class MaisCurtoPrimeiro implements Escalonador {
             p.setDuracao(duracao);
             this.fila.add(p);
         }
+
+        this.ordernaFila();
     }
 
     @Override
@@ -158,5 +172,9 @@ public class MaisCurtoPrimeiro implements Escalonador {
     @Override
     public void retomarProcesso(String nomeProcesso) {
 
+    }
+
+    public void ordernaFila(){
+        Collections.sort(this.fila);
     }
 }

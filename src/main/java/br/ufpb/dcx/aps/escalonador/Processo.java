@@ -8,7 +8,6 @@ public class Processo implements Comparable<Processo> {
     private int ticks;
     private int duracao;
     private int prioridade;
-    private int temp;
     private boolean bloqueado;
 
 
@@ -60,9 +59,6 @@ public class Processo implements Comparable<Processo> {
 
 	public void setTicks(int ticks) { this.ticks = ticks; }
 
-	public int getTemp() { return temp; }
-
-	public void setTemp(int temp) { this.temp = temp; }
 
     public boolean isBloqueado() {
         return bloqueado;
@@ -90,17 +86,18 @@ public class Processo implements Comparable<Processo> {
 
     @Override
     public int compareTo(Processo o) {
-        if(this.prioridade < o.prioridade) {
-            return -1;
-        }else if(this.prioridade > o.prioridade) {
+        if(this.getPrioridade() > o.getPrioridade()){
             return 1;
+        }else if(this.getPrioridade() < o.getPrioridade()){
+            return -1;
         }
 
-        if(this.temp < o.temp) {
-            return -1;
-        }else if(this.temp > o.temp) {
+        if(this.duracao > o.getDuracao()){
             return 1;
+        }else if(this.duracao < o.getDuracao()){
+            return -1;
         }
+
         return 0;
     }
 }
