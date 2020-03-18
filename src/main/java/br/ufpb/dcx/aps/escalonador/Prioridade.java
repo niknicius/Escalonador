@@ -45,30 +45,56 @@ public class Prioridade implements Escalonador {
     @Override
     public void tick() {
         tick++;
-
         this.removeProcessosExpirados();
         this.removeProcessosBloqueados();
+        this.readicionaProcessoBloqueado();
 
-        if(this.rodando == null && this.fila.size() > 0){
-            this.rodando = this.fila.remove(0);
-        }else if(this.rodando != null && this.rodando.getTickFinal() != 0 && this.rodando.getTickFinal() < (this.tick) && this.fila.size() > 0){
-            this.rodando = this.fila.remove(0);
-        }else if(this.rodando != null && this.rodando.getTickFinal() != 0 && this.rodando.getTickFinal() < (this.tick)){
-            this.rodando = null;
-        }else if(this.rodando != null && this.fila.size() > 0 && this.rodando.getPrioridade() < this.fila.get(0).getPrioridade()){
-            this.fila.add(this.rodando);
-            this.rodando = this.fila.remove(0);
-            System.out.println("a");
-        }
-        else if(this.rodando != null && this.fila.size() > 0 && this.rodando.getTicks()== this.quantum){
-            this.fila.add(this.rodando);
-            this.rodando.setTicks(0);
+
+        if(rodandoNullEFilaNao()){
             this.rodando = this.fila.remove(0);
         }
+
+        if(this.rodando != null && this.fila.size() > 0){
+            if(this.rodando.getPrioridade() > this.fila.get(0).getPrioridade()){
+                this.fila.add(this.rodando);
+                this.rodando = this.fila.remove(0);
+            }
+        }
+
+        if(this.rodando != null){
+            if(this.rodando.getTickFinal() != 0 && this.rodando.getTickFinal() < this.tick){
+                if(this.fila.size() > 0){
+                    this.rodando = this.fila.remove(0);
+                }else {
+                    this.rodando = null;
+                }
+            }
+        }
+
+        if(this.rodando != null){
+            if(this.rodando.getTicks() == this.quantum && this.fila.size() > 0){
+                this.rodando.setTicks(0);
+                this.fila.add(this.rodando);
+                this.rodando = this.fila.remove(0);
+            }
+        }
+
+        if(this.rodando != null){
+            if(this.fila.size() > 0){
+                if(this.rodando.getPrioridade() >= this.fila.get(0).getPrioridade()){
+                    this.rodando.setTicks(this.rodando.getTicks() + 1);
+                }
+            }
+        }
+
 
         this.readicionaProcessoBloqueado();
-        this.incrementaTickProcessoAtual();
+        this.ordenarFila();
 
+    }
+
+    private boolean rodandoNullEFilaNao(){
+        return this.rodando == null && this.fila.size() > 0;
     }
 
     @Override
@@ -90,10 +116,17 @@ public class Prioridade implements Escalonador {
         for(Integer i : keys){
             this.fila.remove((int) i);
         }
+
     }
 
     @Override
     public void readicionaProcessoBloqueado(){
+        this.moverProcessosBloquadosParaFila();
+        this.ordenarFila();
+
+    }
+
+    public void moverProcessosBloquadosParaFila(){
         ArrayList<Integer> keysA = new ArrayList<>();
         ArrayList<Integer> keysB = new ArrayList<>();
 
@@ -116,11 +149,14 @@ public class Prioridade implements Escalonador {
         for(Integer i : keysB){
             this.aRetormar.remove(i);
         }
+
+        this.ordenarFila();
     }
 
     @Override
     public void removeProcessosBloqueados(){
         if(this.rodando != null && this.rodando.isBloqueado()){
+            this.rodando.setTicks(0);
             this.bloqueados.add(this.rodando);
             if(this.fila.size() > 0){
                 this.rodando = this.fila.remove(0);
@@ -192,13 +228,9 @@ public class Prioridade implements Escalonador {
         if(existe){
             throw new EscalonadorException();
         }else {
-            Processo p = new Processo(nomeProcesso, this.tick, prioridade);
-            if(checarMaiorPriordadeFila(p.getPrioridade())){
-                this.fila.add(p);
-            }else{
-                this.fila.add(0, p);
-            }
-
+        	Processo p = new Processo(nomeProcesso, this.tick, prioridade);
+            this.fila.add(p);
+            this.ordenarFila();
         }
     }
 
@@ -276,4 +308,10 @@ public class Prioridade implements Escalonador {
     public void adicionarProcessoTempoFixo(String string, int duracao) {
 
     }
+
+
+    private void ordenarFila(){
+        Collections.sort(this.fila);
+    }
+
 }

@@ -15,9 +15,12 @@ public class FachadaEscalonador {
 			this.setTipoEscalonadorPrioridade();
 		} else if(tipoEscalonador.equals(TipoEscalonador.MaisCurtoPrimeiro)){
 			this.setTipoEscalonadorMaisCurtoPrimeiro();
+		} else if(tipoEscalonador.equals(TipoEscalonador.Fifo)){
+			this.setTipoEscalonadorFifo();
 		}
 
 	}
+
 
 	public FachadaEscalonador(TipoEscalonador tipoEscalonador, int quantum) {
 		if(quantum <= 0){
@@ -28,6 +31,8 @@ public class FachadaEscalonador {
 			this.setTipoEscalonadorPrioridade(quantum);
 		} else if(tipoEscalonador.equals(TipoEscalonador.MaisCurtoPrimeiro)){
 			this.setTipoEscalonadorMaisCurtoPrimeiro(quantum);
+		} else if(tipoEscalonador.equals(TipoEscalonador.MaisCurtoPrimeiro)){
+			this.setTipoEscalonadorFifo(quantum);
 		}
 	}
 
@@ -55,12 +60,17 @@ public class FachadaEscalonador {
 		this.escalonador = new MaisCurtoPrimeiro(quantum);
 	}
 
+	void setTipoEscalonadorFifo() { this.escalonador = new Fifo(); }
+
+	void setTipoEscalonadorFifo(int quantum) { this.escalonador = new Fifo(quantum); }
+
+
 	void adicionarProcesso(String nomeProcesso){
 		this.escalonador.adicionarProcesso(nomeProcesso);
 	}
 
 	void adicionarProcesso(String nomeProcesso, int prioridade){
-		this.escalonador.adicionarProcesso(nomeProcesso);
+		this.escalonador.adicionarProcesso(nomeProcesso, prioridade);
 	}
 
 	void finalizarProcesso(String nomeProcesso){
