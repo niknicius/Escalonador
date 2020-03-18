@@ -1,27 +1,29 @@
 package br.ufpb.dcx.aps.escalonador;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class Processo {
+public class Processo implements Comparable<Processo> {
 
     private String name;
     private int tickInicial;
     private int tickFinal;
     private int ticks;
+    private int duracao;
     private int prioridade;
+    private int temp;
     private boolean bloqueado;
 
-   
+
+
     public Processo(String name, int tickInicial) {
         this.name = name;
         this.tickInicial = tickInicial;
     }
+
     public Processo(String name, int tickInicial, int prioridade) {
         this.name = name;
         this.tickInicial = tickInicial;
         this.prioridade = prioridade;
     }
+
 
     public String getName() {
         return name;
@@ -56,10 +58,11 @@ public class Processo {
 		return ticks;
 	}
 
-	public void setTicks(int ticks) {
-		this.ticks = ticks;
-		
-	}
+	public void setTicks(int ticks) { this.ticks = ticks; }
+
+	public int getTemp() { return temp; }
+
+	public void setTemp(int temp) { this.temp = temp; }
 
     public boolean isBloqueado() {
         return bloqueado;
@@ -67,5 +70,37 @@ public class Processo {
 
     public void setBloqueado(boolean bloqueado) {
         this.bloqueado = bloqueado;
+    }
+
+    public int getPrioridade() {
+        return prioridade;
+    }
+
+    public void setPrioridade(int prioridade) {
+        this.prioridade = prioridade;
+    }
+
+    public int getDuracao() {
+        return duracao;
+    }
+
+    public void setDuracao(int duracao) {
+        this.duracao = duracao;
+    }
+
+    @Override
+    public int compareTo(Processo o) {
+        if(this.prioridade < o.prioridade) {
+            return -1;
+        }else if(this.prioridade > o.prioridade) {
+            return 1;
+        }
+
+        if(this.temp < o.temp) {
+            return -1;
+        }else if(this.temp > o.temp) {
+            return 1;
+        }
+        return 0;
     }
 }
