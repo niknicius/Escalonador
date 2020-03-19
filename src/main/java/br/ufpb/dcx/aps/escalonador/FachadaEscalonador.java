@@ -36,7 +36,9 @@ public class FachadaEscalonador {
 		}
 	}
 
+
 	void setTipoEscalonadorRoundRobin(){ this.escalonador = new RoundRobin(); }
+
 
 	void setTipoEscalonadorRoundRobin(int quantum){
 		this.escalonador = new RoundRobin(quantum);
@@ -94,7 +96,5 @@ public class FachadaEscalonador {
 	String getStatus(){
 		return this.escalonador.getStatus();
 	}
-
 	
-
 }

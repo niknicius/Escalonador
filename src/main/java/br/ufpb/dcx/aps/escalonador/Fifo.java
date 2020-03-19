@@ -9,7 +9,9 @@ public class Fifo implements Escalonador {
     private Processo rodando;
     private ArrayList<Processo> fila = new ArrayList<>();
 
-    public int getQuantum() { return quantum; }
+    public int getQuantum() { 
+    	return quantum; 
+    }
 
     public void setQuantum(int quantum) { this.quantum = quantum; }
 
@@ -45,14 +47,16 @@ public class Fifo implements Escalonador {
     @Override
     public void tick() {
         tick++;
-        if(getRodando() == null && getFila().size() > 0){
-            setRodando(getFila().remove(0));
-        }
-        if(getRodando() != null && getRodando().getDuracao() == getRodando().getTicks()){
-            setRodando(null);
-        }
-        if(getRodando() != null){
-            getRodando().setTicks(getRodando().getTicks() + 1);
+        if(this.rodando == null && this.fila.size() > 0){
+            this.rodando = this.fila.remove(0);
+        }if(this.rodando != null && this.rodando.getDuracao() == this.rodando.getTicks()){
+        	if(this.fila.size() > 0){
+                this.rodando = this.fila.remove(0);
+            }else {
+                this.rodando = null;
+            }
+        }if(this.rodando != null){
+            this.rodando.setTicks(this.rodando.getTicks() + 1);
         }
     }
 
@@ -89,8 +93,27 @@ public class Fifo implements Escalonador {
 
     @Override
     public void adicionarProcessoTempoFixo(String nomeProcesso, int duracao) {
-        Processo p = new Processo(nomeProcesso, getTick());
+    	if(nomeProcesso == null || duracao <= 0){
+            throw new EscalonadorException();
+        }
+        boolean existe = false;
+        if(this.rodando != null && this.rodando.getName().equalsIgnoreCase(nomeProcesso)){
+            existe = false;
+        }else {
+            for (Processo p : this.fila) {
+                if (p.getName().equalsIgnoreCase(nomeProcesso)) {
+                    existe = true;
+                    break;
+                }
+            }
+
+        }
+        if (existe) {
+        	throw new EscalonadorException();
+        }else {
+    	Processo p = new Processo(nomeProcesso, getTick());
         p.setDuracao(duracao);
-        getFila().add(p);
-    }
+        this.getFila().add(p);
+        }
+      }
 }

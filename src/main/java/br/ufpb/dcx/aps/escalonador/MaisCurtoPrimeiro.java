@@ -146,7 +146,7 @@ public class MaisCurtoPrimeiro implements Escalonador {
         if(existe){
             throw new EscalonadorException();
         }else {
-            Processo p = new Processo(nomeProcesso, this.tick);
+            Processo p = new Processo(nomeProcesso, this.tick, duracao);
             p.setDuracao(duracao);
             this.fila.add(p);
         }
