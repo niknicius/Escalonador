@@ -9,9 +9,7 @@ public class Processo implements Comparable<Processo> {
     private int duracao;
     private int prioridade;
     private boolean bloqueado;
-
-
-
+    
     public Processo(String name, int tickInicial) {
         this.name = name;
         this.tickInicial = tickInicial;

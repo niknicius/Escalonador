@@ -201,7 +201,7 @@ public class Prioridade implements Escalonador {
     }
 
     @Override
-    public void adicionarProcesso(String nomeProcesso, int prioridad) {
+    public void adicionarProcesso(String nomeProcesso, int prioridade) {
         if(nomeProcesso == null){
             throw new EscalonadorException();
         }
@@ -228,10 +228,9 @@ public class Prioridade implements Escalonador {
         if(existe){
             throw new EscalonadorException();
         }else {
-            Processo p = new Processo(nomeProcesso, this.tick, prioridad);
+        	Processo p = new Processo(nomeProcesso, this.tick, prioridade);
             this.fila.add(p);
             this.ordenarFila();
-
         }
     }
 
