@@ -9,8 +9,8 @@ public class Fifo implements Escalonador {
     private Processo rodando;
     private ArrayList<Processo> fila = new ArrayList<>();
 
-    public int getQuantum() { 
-    	return quantum; 
+    public int getQuantum() {
+        return quantum;
     }
 
     public void setQuantum(int quantum) { this.quantum = quantum; }
@@ -50,7 +50,7 @@ public class Fifo implements Escalonador {
         if(this.rodando == null && this.fila.size() > 0){
             this.rodando = this.fila.remove(0);
         }if(this.rodando != null && this.rodando.getDuracao() == this.rodando.getTicks()){
-        	if(this.fila.size() > 0){
+            if(this.fila.size() > 0){
                 this.rodando = this.fila.remove(0);
             }else {
                 this.rodando = null;
@@ -93,7 +93,7 @@ public class Fifo implements Escalonador {
 
     @Override
     public void adicionarProcessoTempoFixo(String nomeProcesso, int duracao) {
-    	if(nomeProcesso == null || duracao <= 0){
+        if(nomeProcesso == null || duracao <= 0){
             throw new EscalonadorException();
         }
         boolean existe = false;
@@ -109,11 +109,11 @@ public class Fifo implements Escalonador {
 
         }
         if (existe) {
-        	throw new EscalonadorException();
+            throw new EscalonadorException();
         }else {
-    	Processo p = new Processo(nomeProcesso, getTick());
-        p.setDuracao(duracao);
-        this.getFila().add(p);
+            Processo p = new Processo(nomeProcesso, getTick());
+            p.setDuracao(duracao);
+            this.getFila().add(p);
         }
-      }
+    }
 }

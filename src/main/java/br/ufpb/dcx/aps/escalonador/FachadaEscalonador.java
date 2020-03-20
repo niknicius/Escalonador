@@ -1,5 +1,7 @@
 package br.ufpb.dcx.aps.escalonador;
 
+import br.ufpb.dcx.aps.escalonador.command.*;
+
 public class FachadaEscalonador {
 
     private Escalonador escalonador;
@@ -39,7 +41,6 @@ public class FachadaEscalonador {
 
 	void setTipoEscalonadorRoundRobin(){ this.escalonador = new RoundRobin(); }
 
-
 	void setTipoEscalonadorRoundRobin(int quantum){
 		this.escalonador = new RoundRobin(quantum);
 	}
@@ -65,36 +66,47 @@ public class FachadaEscalonador {
 	void setTipoEscalonadorFifo(int quantum) { this.escalonador = new Fifo(quantum); }
 
 
+	void runCommand(Command command){
+		command.setEscalonador(this.escalonador);
+		command.execute();
+	}
+
+	String runCommandWithStringReturn(Command command){
+		command.setEscalonador(this.escalonador);
+		return command.execute(true);
+	}
+
 	void adicionarProcesso(String nomeProcesso){
-		this.escalonador.adicionarProcesso(nomeProcesso);
+		this.runCommand(new AdicionarProcessoCommand(nomeProcesso));
 	}
 
 	void adicionarProcesso(String nomeProcesso, int prioridade){
-		this.escalonador.adicionarProcesso(nomeProcesso, prioridade);
+		this.runCommand(new AdicionarProcessoCommand(nomeProcesso, prioridade));
 	}
 
 	void finalizarProcesso(String nomeProcesso){
-		this.escalonador.finalizarProcesso(nomeProcesso);
+		this.runCommand(new FinalizarProcessoCommand(nomeProcesso));
 	}
 
 	void bloquearProcesso(String nomeProcesso){
-		this.escalonador.bloquearProcesso(nomeProcesso);
+		this.runCommand(new BloquearProcessoCommand(nomeProcesso));
 	}
 
 	void retomarProcesso(String nomeProcesso){
-		this.escalonador.retomarProcesso(nomeProcesso);
+		this.runCommand(new RetomarProcessoCommand(nomeProcesso));
 	}
 
-	void adicionarProcessoTempoFixo(String nomeProcesso, int a){
-		this.escalonador.adicionarProcessoTempoFixo(nomeProcesso, a);
+	void adicionarProcessoTempoFixo(String nomeProcesso, int duracao){
+		this.runCommand(new AdicionarProcessoTempoFixoCommand(nomeProcesso, duracao));
 	}
 
 	void tick(){
-		this.escalonador.tick();
+		this.runCommand(new TickCommand());
 	}
 
 	String getStatus(){
-		return this.escalonador.getStatus();
+		Command getStatus = new GetStatusCommand();
+		return this.runCommandWithStringReturn(getStatus);
 	}
 	
 }
